@@ -63,10 +63,15 @@ app.get("/listings/:id/edit", async (req, res) => {
 });
 
 //update route
-app.put("/listings/:id", async (req, res) => {
-    let {id} = req.params;
-    await Listing.findByIdAndUpdate(id, {...req.body.listing});
-    res.redirect(`/listings/${id}`);
+// app.put("/listings/:id", async (req, res) => {
+//     let {id} = req.params;
+//     await Listing.findByIdAndUpdate(id, {...req.body.listing});
+//     res.redirect(`/listings/${id}`);
+// });
+app.put("/listings/:id",async (req, res) => {
+    await Listing.findByIdAndUpdate(req.params.id, { ...req.body.listing });
+    req.flash("success", "Listing Updated Successfully!");
+    return res.redirect(`/listings/${req.params.id}`);
 });
 
 //delete route
@@ -76,19 +81,6 @@ app.delete("/listings/:id", async (req, res) => {
     console.log(deletedListing);
     res.redirect("/listings");
 });
-
-// app.get("/testListing", async(req, res) => {
-//     let samplelisting = new Listing({
-//         title: "Villa La Vida",
-//         description: "By the beach",
-//         price: 1300,
-//         location: "23/B, Pondicheri",
-//         country: "India",
-//     });
-//     await samplelisting.save();
-//     console.log("sample was saved");
-//     res.send("successful testing");
-// });
 
 app.listen(8080, () => {
     console.log("listening");
